@@ -1,0 +1,26 @@
+name: SonarQube Cloud
+
+on:
+  # Phan tich sau khi code duoc merge/push vao main
+  push:
+    branches:
+      - main
+  # Phan tich PR truoc khi merge (de Quality Gate chan merge khi co loi)
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarqube:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Tat shallow clone de Sonar tinh "new code" chinh xac
+          fetch-depth: 0
+
+      - name: SonarQube Cloud Scan
+        uses: SonarSource/sonarqube-scan-action@v7
+        env:
+          # Token luu trong GitHub Secrets, KHONG hardcode trong repo
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
