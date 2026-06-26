@@ -11,6 +11,18 @@ test("grade tra ve A khi diem cao", () => {
   expect(grade(95)).toBe("A");
 });
 
+test("grade tra ve B", () => {
+  expect(grade(85)).toBe("B");
+});
+
+test("grade tra ve C", () => {
+  expect(grade(75)).toBe("C");
+});
+
+test("grade tra ve D", () => {
+  expect(grade(65)).toBe("D");
+});
+
 test("grade tra ve F khi diem thap", () => {
   expect(grade(10)).toBe("F");
 });
