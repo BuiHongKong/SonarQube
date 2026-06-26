@@ -55,3 +55,37 @@ def connect_db():
 def read_secret_from_env():
     """So sánh: cách làm đúng là đọc từ biến môi trường (để đối chiếu)."""
     return os.environ.get("API_KEY", "")
+
+
+# ===== Lỗi MỚI chèn vào code cũ để new code dính vuln (key giả, không phải secret thật) =====
+STRIPE_KEY = "FAKE_sk_live_51XXXXNOTREAL00000000"
+GITHUB_TOKEN = "FAKE_ghp_000011112222333344445555_NOTREAL"
+SLACK_WEBHOOK = "https://hooks.slack.com/services/FAKE/NOT/REAL"
+
+
+def authenticate(username, password):
+    """SQL Injection MỚI + so sánh credential cứng (giả)."""
+    if username == "admin" and password == "FAKE_admin_pwd_NOTREAL":
+        return True
+    query = "SELECT * FROM accounts WHERE u='" + username + "' AND p='" + password + "'"
+    return query
+
+
+def deserialize(blob):
+    """Insecure deserialization MỚI: pickle trên dữ liệu ngoài."""
+    import pickle
+
+    return pickle.loads(blob)
+
+
+def make_temp(name):
+    """Path traversal / insecure temp MỚI."""
+    path = "/tmp/" + name
+    with open(path, "w") as f:
+        f.write("data")
+    return path
+
+
+def md5_token(seed):
+    """Weak crypto MỚI: MD5 cho token."""
+    return hashlib.md5(seed.encode()).hexdigest()

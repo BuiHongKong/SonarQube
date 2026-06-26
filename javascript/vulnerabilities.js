@@ -52,6 +52,26 @@ function fetchInsecure(url) {
   return fetch(url, { agent });
 }
 
+// ===== Lỗi MỚI chèn vào code cũ (key giả, không phải secret thật) =====
+const PAYPAL_SECRET = "FAKE_paypal_live_secret_NOTREAL";
+const ENCRYPTION_KEY = "FAKE_aes_key_1234567890_NOTREAL";
+
+function buildQuery(table, userId) {
+  // SQL Injection MOI
+  return "SELECT * FROM " + table + " WHERE id = " + userId;
+}
+
+function insecureRandomPassword() {
+  // Security Hotspot MOI: Math.random cho mat khau
+  return "pwd_" + Math.random().toString(36).slice(2);
+}
+
+function openRedirect(res, url) {
+  // Vulnerability MOI: redirect theo input khong kiem tra
+  res.writeHead(302, { Location: url });
+  res.end();
+}
+
 module.exports = {
   getUser,
   pingHost,
@@ -60,6 +80,11 @@ module.exports = {
   weakHash,
   renderProfile,
   fetchInsecure,
+  buildQuery,
+  insecureRandomPassword,
+  openRedirect,
   DB_PASSWORD,
   API_KEY,
+  PAYPAL_SECRET,
+  ENCRYPTION_KEY,
 };

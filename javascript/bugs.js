@@ -50,6 +50,36 @@ function doWork(n) {
   return n + 1;
 }
 
+// ===== Lỗi MỚI chèn vào code cũ (key giả, không phải secret thật) =====
+const STRIPE_KEY = "FAKE_sk_live_51XXXXNOTREAL00000000";
+const GITHUB_TOKEN = "FAKE_ghp_000011112222333344445555_NOTREAL";
+
+function authenticate(username, password) {
+  // Bug + credential cung (gia)
+  if (username == "admin" && password == "FAKE_admin_pwd_NOTREAL") {
+    return true;
+  }
+  return false;
+}
+
+function divide(a, b) {
+  // Bug MOI: khong kiem tra chia 0, gan trong dieu kien
+  let result;
+  if ((result = a / b)) {
+    return result;
+  }
+  return 0;
+}
+
+function duplicateLogic(x) {
+  // Bug MOI: hai nhanh giong het nhau
+  if (x > 0) {
+    return doWork(x);
+  } else {
+    return doWork(x);
+  }
+}
+
 module.exports = {
   checkStatus,
   assignInCondition,
@@ -57,4 +87,7 @@ module.exports = {
   compute,
   checkNaN,
   identicalBranches,
+  authenticate,
+  divide,
+  duplicateLogic,
 };

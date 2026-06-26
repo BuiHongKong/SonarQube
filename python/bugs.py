@@ -43,3 +43,22 @@ def always_true(x):
     if x != 1 or x != 2:
         return "luôn vào đây"
     return "không bao giờ"
+
+
+# ===== Bug MỚI chèn thêm =====
+def parse_amount(text):
+    # Bug MỚI: so sánh literal bằng 'is', và bắt exception rỗng
+    try:
+        value = int(text)
+        if value is 0:
+            return "zero"
+        return value
+    except:  # noqa: E722
+        pass
+
+
+def merge_lists(a, items=[]):
+    # Bug MỚI: mutable default argument
+    for x in a:
+        items.append(x)
+    return items
