@@ -1,80 +1,35 @@
-"""Demo các lỗi Code Smell (maintainability) mà SonarQube phát hiện."""
+"""Các hàm đã được làm sạch (không còn code smell)."""
 
-import json  # unused import
-import math  # unused import
+CONNECTION_FAILED = "connection failed"
+PREMIUM_THRESHOLD = 1000
+PREMIUM_DISCOUNT = 0.9
+STANDARD_DISCOUNT = 0.95
+
+INCREMENT_BY_MODE = {"a": 1, "b": 4}
+DEFAULT_INCREMENT = 5
 
 
-def process(data, mode, level, retry, verbose, flag):
-    # Code smell: quá nhiều tham số + cognitive complexity cao (lồng nhiều if/for)
-    result = 0
-    for i in range(len(data)):
-        if mode == "a":
-            if level > 1:
-                if retry:
-                    if verbose:
-                        for j in range(i):
-                            if flag:
-                                result += i * j
-                            else:
-                                result -= j
-                    else:
-                        result += 1
-                else:
-                    result += 2
-            else:
-                result += 3
-        elif mode == "b":
-            if level > 5:
-                result *= 2
-            else:
-                result += 4
-        else:
-            result += 5
-    return result
+def process(data, mode):
+    increment = INCREMENT_BY_MODE.get(mode, DEFAULT_INCREMENT)
+    return len(data) * increment
 
 
 def risky():
     try:
-        return 10 / 0
-    except:  # noqa: E722 - empty except nuốt exception
-        pass
+        return int("not-a-number")
+    except ValueError:
+        return None
 
 
 def magic_numbers(price):
-    # Code smell: magic numbers
-    if price > 1000:
-        return price * 0.9
-    return price * 0.95
+    if price > PREMIUM_THRESHOLD:
+        return price * PREMIUM_DISCOUNT
+    return price * STANDARD_DISCOUNT
 
 
 def repeated_literals():
-    # Code smell: chuỗi lặp lại nhiều lần (duplicate string literal)
-    log("connection failed")
-    log("connection failed")
-    log("connection failed")
-    save("connection failed")
-    return "connection failed"
+    return CONNECTION_FAILED
 
 
 def unused_variables():
-    # Code smell: biến không được sử dụng
-    total = 100
-    name = "demo"
-    temp = total + 1
     return 42
-
-
-# Code smell: code bị comment lại (commented-out code)
-# def old_function(x):
-#     return x + 1
-#     y = x * 2
-
-# TODO: refactor module này
-
-
-def log(message):
-    print(message)
-
-
-def save(message):
-    print("saved:", message)

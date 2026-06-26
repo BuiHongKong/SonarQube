@@ -1,14 +1,14 @@
-// Test cho javascript/bugs.js - cover cac ham thuan de sinh coverage.
+// Test cho javascript/bugs.js (da lam sach) - cover de sinh coverage.
 
 const {
   checkStatus,
   compute,
   checkNaN,
-  identicalBranches,
+  pickWork,
   config,
 } = require("../../javascript/bugs");
 
-test("checkStatus tra ve OK khi == '200'", () => {
+test("checkStatus tra ve OK khi code la 200", () => {
   expect(checkStatus("200")).toBe("OK");
 });
 
@@ -20,15 +20,19 @@ test("compute nhan doi gia tri", () => {
   expect(compute(3)).toBe(6);
 });
 
-test("checkNaN luon tra ve khong phai NaN (bug so sanh === NaN)", () => {
-  expect(checkNaN(NaN)).toBe("không phải NaN");
+test("checkNaN nhan dien NaN dung", () => {
+  expect(checkNaN(NaN)).toBe("là NaN");
 });
 
-test("identicalBranches luon tra ve 2", () => {
-  expect(identicalBranches(true)).toBe(2);
-  expect(identicalBranches(false)).toBe(2);
+test("checkNaN voi so binh thuong", () => {
+  expect(checkNaN(5)).toBe("không phải NaN");
 });
 
-test("config giu gia tri key trung cuoi cung (bug duplicate key)", () => {
+test("pickWork chon nhanh theo flag", () => {
+  expect(pickWork(true)).toBe(2);
+  expect(pickWork(false)).toBe(3);
+});
+
+test("config co timeout 2000", () => {
   expect(config.timeout).toBe(2000);
 });

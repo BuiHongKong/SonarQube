@@ -30,13 +30,12 @@ def test_risky_returns_none():
 
 
 def test_process_mode_a():
-    assert process([1, 2, 3], "a", 2, True, True, True) >= 0
+    assert process([1, 2, 3], "a") == 3
 
 
 def test_process_mode_b():
-    # mode "b", level <= 5, 1 phan tu -> result += 4
-    assert process([1], "b", 3, False, False, False) == 4
+    assert process([1], "b") == 4
 
 
 def test_process_default():
-    assert process([1], "c", 0, False, False, False) == 5
+    assert process([1], "c") == 5

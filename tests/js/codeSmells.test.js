@@ -24,9 +24,9 @@ test("unusedVariables tra ve 42", () => {
 });
 
 test("process mode mac dinh", () => {
-  expect(proc([1], "c", 0, false, false, false)).toBe(5);
+  expect(proc([1], "c")).toBe(5);
 });
 
 test("process mode b", () => {
-  expect(proc([1], "b", 3, false, false, false)).toBe(4);
+  expect(proc([1], "b")).toBe(4);
 });
