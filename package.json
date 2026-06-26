@@ -1,0 +1,12 @@
+{
+  "name": "sonarqube-demo-buggy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo buggy code for SonarQube detection",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

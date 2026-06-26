@@ -1,57 +1,44 @@
-"""Demo các lỗi Vulnerability / Security Hotspot mà SonarQube phát hiện.
+"""Các thao tác I/O được viết theo chuẩn an toàn (đã làm sạch).
 
-Đây là code DEMO có lỗi cố ý, KHÔNG dùng cho production.
+Không còn hardcoded credentials, SQL injection, command injection, eval,
+weak crypto hay tắt xác thực SSL.
 """
 
 import hashlib
 import os
 import sqlite3
-import subprocess
 
 import requests
 
-# Security Hotspot / Vulnerability: hardcoded credentials
-DB_PASSWORD = "SuperSecret123!"
-API_KEY = "FAKE_DEMO_API_KEY_NOT_REAL"
-AWS_SECRET = "FAKE_DEMO_AWS_SECRET_NOT_REAL"
+HTTP_TIMEOUT = 10
+
+
+def get_api_key():
+    """Đọc khóa từ biến môi trường thay vì hardcode."""
+    return os.environ.get("API_KEY", "")
 
 
 def get_user(username):
-    """SQL Injection: nối trực tiếp input vào câu query."""
+    """Dùng truy vấn tham số hóa để tránh SQL injection."""
     conn = sqlite3.connect("app.db")
     cursor = conn.cursor()
-    query = "SELECT * FROM users WHERE name = '" + username + "'"
-    cursor.execute(query)
+    cursor.execute("SELECT * FROM users WHERE name = ?", (username,))
     return cursor.fetchall()
 
 
-def ping_host(host):
-    """Command Injection: shell=True với input người dùng."""
-    cmd = "ping -c 1 " + host
-    return subprocess.call(cmd, shell=True)
-
-
-def run_code(user_input):
-    """Code Injection: eval trên dữ liệu đầu vào."""
-    return eval(user_input)
-
-
 def hash_password(password):
-    """Weak crypto: MD5 không an toàn cho mật khẩu."""
-    return hashlib.md5(password.encode()).hexdigest()
+    """Dùng SHA-256 thay cho MD5."""
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 def fetch_data(url):
-    """Insecure: tắt xác thực chứng chỉ SSL/TLS."""
-    response = requests.get(url, verify=False)
+    """Giữ xác thực chứng chỉ SSL mặc định và đặt timeout."""
+    response = requests.get(url, timeout=HTTP_TIMEOUT)
     return response.text
 
 
 def connect_db():
-    """Hardcoded credentials sử dụng trực tiếp."""
-    return f"postgres://admin:{DB_PASSWORD}@10.0.0.5:5432/prod"
-
-
-def read_secret_from_env():
-    """So sánh: cách làm đúng là đọc từ biến môi trường (để đối chiếu)."""
-    return os.environ.get("API_KEY", "")
+    """Lấy thông tin kết nối từ biến môi trường."""
+    password = os.environ.get("DB_PASSWORD", "")
+    host = os.environ.get("DB_HOST", "localhost")
+    return f"postgres://app:{password}@{host}:5432/app"
