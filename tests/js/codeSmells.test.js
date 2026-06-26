@@ -1,0 +1,32 @@
+// Test cho javascript/codeSmells.js - cover cac ham thuan de sinh coverage.
+
+const {
+  process: proc,
+  grade,
+  repeatedLiterals,
+  unusedVariables,
+} = require("../../javascript/codeSmells");
+
+test("grade tra ve A khi diem cao", () => {
+  expect(grade(95)).toBe("A");
+});
+
+test("grade tra ve F khi diem thap", () => {
+  expect(grade(10)).toBe("F");
+});
+
+test("repeatedLiterals tra ve connection failed", () => {
+  expect(repeatedLiterals()).toBe("connection failed");
+});
+
+test("unusedVariables tra ve 42", () => {
+  expect(unusedVariables()).toBe(42);
+});
+
+test("process mode mac dinh", () => {
+  expect(proc([1], "c", 0, false, false, false)).toBe(5);
+});
+
+test("process mode b", () => {
+  expect(proc([1], "b", 3, false, false, false)).toBe(4);
+});

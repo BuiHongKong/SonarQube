@@ -1,0 +1,6 @@
+# Runtime deps cho code demo
+requests
+
+# Test + coverage
+pytest
+pytest-cov
